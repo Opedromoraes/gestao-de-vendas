@@ -5,9 +5,17 @@ import jakarta.transaction.Transactional;
 import lombok.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ClienteRepository extends JpaRepository<Cliente,Long> {
+import java.util.Optional;
+
+public interface ClienteRepository extends JpaRepository<Cliente, Long> {
 
     @Transactional
-    Cliente salvar(@NonNull Cliente cliente);
+    default Cliente salvar(@NonNull Cliente cliente) {
+        try {
+            return save(cliente);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao salvar cliente", e);
+        }
+    }
 
 }

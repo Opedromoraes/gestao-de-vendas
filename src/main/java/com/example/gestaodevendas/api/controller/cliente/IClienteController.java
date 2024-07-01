@@ -2,19 +2,19 @@ package com.example.gestaodevendas.api.controller.cliente;
 
 import com.example.gestaodevendas.api.controller.cliente.request.ClienteRequest;
 import com.example.gestaodevendas.api.controller.cliente.response.ClienteResponse;
+import com.example.gestaodevendas.domain.exceptions.dto.ErroDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Min;
-import org.springdoc.api.annotations.ParameterObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @Tag(name = "Clientes")
@@ -31,39 +31,40 @@ public interface IClienteController {
                                 responseCode = "201",
                                 description = "Cliente criado com sucesso.",
                                 content = @Content(schema = @Schema(implementation = ClienteResponse.class))),
-//                        @ApiResponse(
-//                                responseCode = "422",
-//                                description = "Requisição possui pelo menos um valor faltante ou inválido.",
-//                                content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
-//                        @ApiResponse(
-//                                responseCode = "500",
-//                                description = "Ocorreu um erro inesperado.",
-//                                content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
+                        @ApiResponse(
+                                responseCode = "422",
+                                description = "Requisição possui pelo menos um valor faltante ou inválido.",
+                                content = @Content(schema = @Schema(implementation = ErroDTO.class))),
+                        @ApiResponse(
+                                responseCode = "500",
+                                description = "Ocorreu um erro inesperado.",
+                                content = @Content(schema = @Schema(implementation = ErroDTO.class)))
                 })
         @PostMapping
-        @ResponseStatus(CREATED)
+        @ResponseStatus(
+                CREATED)
         ResponseEntity<ClienteResponse> create(@Valid @RequestBody ClienteRequest clienteRequest);
-//
+
 //        @Operation(
-//                summary = "Buscar cardapio por id",
-//                description = "Endpoint responsável por buscar um cardapio",
+//                summary = "Buscar cliente por id",
+//                description = "Endpoint responsável por buscar um cliente",
 //                responses = {
 //                        @ApiResponse(
 //                                responseCode = "200",
-//                                description = "Cardapio encontrado com sucesso.",
-//                                content = @Content(schema = @Schema(implementation = CategoriaResponse.class))),
+//                                description = "Cliente encontrado com sucesso.",
+//                                content = @Content(schema = @Schema(implementation = ClienteResponse.class))),
 //                        @ApiResponse(
 //                                responseCode = "404",
-//                                description = "Cardapio não encontrado.",
-//                                content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
+//                                description = "Cliente não encontrado.",
+//                                content = @Content(schema = @Schema(implementation = ErroDTO.class))),
 //                        @ApiResponse(
 //                                responseCode = "500",
 //                                description = "Ocorreu um erro inesperado.",
-//                                content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
+//                                content = @Content(schema = @Schema(implementation = ErroDTO.class)))
 //                })
-//        @GetMapping("{id}")
+//        @GetMapping
 //        @ResponseStatus(OK)
-//        ResponseEntity<CardapioResponse> findById(@PathVariable Long id);
+//        ResponseEntity<ClienteResponse> buscarPorId(@PathVariable Long id);
 //
 //        @Operation(
 //                summary = "Deletar Cardapio",

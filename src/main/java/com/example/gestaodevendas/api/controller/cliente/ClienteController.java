@@ -18,10 +18,22 @@ public class ClienteController implements IClienteController{
     private final ClienteService service;
     private final ClienteMapper mapper;
 
+    public ClienteController(ClienteService service, ClienteMapper mapper) {
+        this.service = service;
+        this.mapper = mapper;
+    }
+
     @Override
     public ResponseEntity<ClienteResponse> create(ClienteRequest request) {
         ClienteDTO clienteDTO = service.salvar(mapper.requestToDto(request));
         ClienteResponse response = mapper.dtoToResponse(clienteDTO);
         return ResponseEntity.status(CREATED).body(response);
     }
+
+//    @Override
+//    public ResponseEntity<ClienteResponse> buscarPorId(Long id) {
+//        ClienteDTO clienteDTO = service.buscarPorId(id);
+//        return null;
+//    }
+
 }
