@@ -7,6 +7,9 @@ import com.example.gestaodevendas.repository.ClienteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class ClienteService {
@@ -22,8 +25,12 @@ public class ClienteService {
     public ClienteDTO salvar(ClienteDTO clienteDTO) {
 
         verificarCliente(clienteDTO);
-        Cliente cliente = repository.salvar(mapper.dtoToEntity(clienteDTO));
+        Cliente cliente = repository.save(mapper.dtoToEntity(clienteDTO));
         return mapper.entityToDTO(cliente);
+    }
+
+    public Optional<Cliente> buscarPorId(Long id) {
+        return repository.findById(id);
     }
 
     public ClienteDTO verificarCliente(ClienteDTO clienteDTO){
@@ -42,6 +49,10 @@ public class ClienteService {
 
     }
         return clienteDTO;
+    }
+
+    public void deletarCliente(Long id) {
+        repository.deleteById(id);
     }
 
 //    public ClienteDTO buscarPorId(Long id) {

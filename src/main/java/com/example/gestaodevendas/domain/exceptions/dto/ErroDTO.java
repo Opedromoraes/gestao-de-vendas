@@ -9,13 +9,12 @@ import java.util.List;
 @Getter
 @AllArgsConstructor
 @Builder
-public class ErroDTO {
+public class ErroDTO extends RuntimeException{
 
-    private final String message;
     private final List<String> errors;
 
     public ErroDTO(String message, List<String> errors) {
-        this.message = message;
+        super(message);
         this.errors = errors;
     }
 }

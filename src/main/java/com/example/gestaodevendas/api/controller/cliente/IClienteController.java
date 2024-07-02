@@ -2,6 +2,7 @@ package com.example.gestaodevendas.api.controller.cliente;
 
 import com.example.gestaodevendas.api.controller.cliente.request.ClienteRequest;
 import com.example.gestaodevendas.api.controller.cliente.response.ClienteResponse;
+import com.example.gestaodevendas.domain.entity.Cliente;
 import com.example.gestaodevendas.domain.exceptions.dto.ErroDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -13,8 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import static org.springframework.http.HttpStatus.CREATED;
-import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.HttpStatus.*;
 
 @RestController
 @Tag(name = "Clientes")
@@ -45,47 +45,68 @@ public interface IClienteController {
                 CREATED)
         ResponseEntity<ClienteResponse> create(@Valid @RequestBody ClienteRequest clienteRequest);
 
-//        @Operation(
-//                summary = "Buscar cliente por id",
-//                description = "Endpoint responsável por buscar um cliente",
-//                responses = {
-//                        @ApiResponse(
-//                                responseCode = "200",
-//                                description = "Cliente encontrado com sucesso.",
-//                                content = @Content(schema = @Schema(implementation = ClienteResponse.class))),
-//                        @ApiResponse(
-//                                responseCode = "404",
-//                                description = "Cliente não encontrado.",
-//                                content = @Content(schema = @Schema(implementation = ErroDTO.class))),
-//                        @ApiResponse(
-//                                responseCode = "500",
-//                                description = "Ocorreu um erro inesperado.",
-//                                content = @Content(schema = @Schema(implementation = ErroDTO.class)))
-//                })
-//        @GetMapping
-//        @ResponseStatus(OK)
-//        ResponseEntity<ClienteResponse> buscarPorId(@PathVariable Long id);
-//
-//        @Operation(
-//                summary = "Deletar Cardapio",
-//                description = "Endpoint responsável por deletar um cardapio",
-//                responses = {
-//                        @ApiResponse(
-//                                responseCode = "204",
-//                                description = "Cardapio deletado com sucesso."
-//                        ),
-//                        @ApiResponse(
-//                                responseCode = "404",
-//                                description = "Cardapio não encontrado.",
-//                                content = @Content(schema = @Schema(implementation = ErrorDTO.class))),
-//                        @ApiResponse(
-//                                responseCode = "500",
-//                                description = "Ocorreu um erro inesperado.",
-//                                content = @Content(schema = @Schema(implementation = ErrorDTO.class)))
-//                })
-//        @DeleteMapping(value = "/{id}")
-//        @ResponseStatus(NO_CONTENT)
-//        ResponseEntity<Void> delete(@PathVariable Long id);
+        @Operation(
+                summary = "Buscar cliente por id",
+                description = "Endpoint responsável por buscar um cliente",
+                responses = {
+                        @ApiResponse(
+                                responseCode = "200",
+                                description = "Cliente encontrado com sucesso.",
+                                content = @Content(schema = @Schema(implementation = ClienteResponse.class))),
+                        @ApiResponse(
+                                responseCode = "404",
+                                description = "Cliente não encontrado.",
+                                content = @Content(schema = @Schema(implementation = ErroDTO.class))),
+                        @ApiResponse(
+                                responseCode = "500",
+                                description = "Ocorreu um erro inesperado.",
+                                content = @Content(schema = @Schema(implementation = ErroDTO.class)))
+                })
+        @GetMapping("/{id}")
+        @ResponseStatus(OK)
+        ResponseEntity<Cliente> buscarPorId(@PathVariable Long id);
+
+        @Operation(
+                summary = "Deletar Cliente",
+                description = "Endpoint responsável por deletar um cliente",
+                responses = {
+                        @ApiResponse(
+                                responseCode = "204",
+                                description = "Cliente deletado com sucesso."
+                        ),
+                        @ApiResponse(
+                                responseCode = "404",
+                                description = "Cliente não encontrado.",
+                                content = @Content(schema = @Schema(implementation = ErroDTO.class))),
+                        @ApiResponse(
+                                responseCode = "500",
+                                description = "Ocorreu um erro inesperado.",
+                                content = @Content(schema = @Schema(implementation = ErroDTO.class)))
+                })
+        @DeleteMapping(value = "/{id}")
+        @ResponseStatus(NO_CONTENT)
+        ResponseEntity<Void> deletar(@PathVariable Long id);
+
+        @Operation(
+                summary = "Atualizar Cliente",
+                description = "Endpoint responsável por atualizar um cliente",
+                responses = {
+                        @ApiResponse(
+                                responseCode = "204",
+                                description = "Cliente atualizado com sucesso."
+                        ),
+                        @ApiResponse(
+                                responseCode = "404",
+                                description = "Cliente não encontrado.",
+                                content = @Content(schema = @Schema(implementation = ErroDTO.class))),
+                        @ApiResponse(
+                                responseCode = "500",
+                                description = "Ocorreu um erro inesperado.",
+                                content = @Content(schema = @Schema(implementation = ErroDTO.class)))
+                })
+        @PutMapping("/{id}")
+        @ResponseStatus(NOT_FOUND)
+        ResponseEntity<ClienteResponse> atualizar(@PathVariable Long id,@RequestBody Cliente detalhesCliente);
 //
 //        @Operation(
 //                summary = "Consultar cardápio paginado",

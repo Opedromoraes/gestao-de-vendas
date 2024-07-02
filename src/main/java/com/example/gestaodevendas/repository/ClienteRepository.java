@@ -9,13 +9,4 @@ import java.util.Optional;
 
 public interface ClienteRepository extends JpaRepository<Cliente, Long> {
 
-    @Transactional
-    default Cliente salvar(@NonNull Cliente cliente) {
-        try {
-            return save(cliente);
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao salvar cliente", e);
-        }
-    }
-
 }
