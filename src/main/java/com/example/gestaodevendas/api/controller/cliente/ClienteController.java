@@ -3,16 +3,14 @@ package com.example.gestaodevendas.api.controller.cliente;
 import com.example.gestaodevendas.api.controller.cliente.request.ClienteRequest;
 import com.example.gestaodevendas.api.controller.cliente.response.ClienteResponse;
 import com.example.gestaodevendas.domain.dto.ClienteDTO;
-import com.example.gestaodevendas.domain.entity.Cliente;
-//import com.example.gestaodevendas.domain.mapper.ClienteMapper;
 import com.example.gestaodevendas.domain.mapper.ClienteMapper;
 import com.example.gestaodevendas.service.ClienteService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
-
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.CREATED;
+import static org.springframework.http.HttpStatus.OK;
 
 @RestController
 @RequiredArgsConstructor
@@ -43,25 +41,11 @@ public class ClienteController implements IClienteController {
         return ResponseEntity.noContent().build();
     }
 
-//    @Override
-//    public ResponseEntity<ClienteResponse> atualizar(Long id, Cliente clienteNovo) {
-//        ClienteDTO clienteDTO = service.buscarPorId(id);
-//        Cliente cliente = mapper.dtoToEntity(clienteDTO);
-//
-//        if (cliente.getIdCliente() != null) {
-//
-//            Cliente clienteAtualizado = cliente;
-//            clienteAtualizado.setCpf(clienteNovo.getCpf());
-//            clienteAtualizado.setNome(clienteNovo.getNome());
-//            clienteAtualizado.setEmail(clienteNovo.getEmail());
-//            clienteAtualizado.setTelefone(clienteNovo.getTelefone());
-//            ClienteDTO clienteDTO = mapper.entityToDTO(clienteAtualizado);
-//            service.salvar(clienteDTO);
-//            ClienteResponse response = mapper.dtoToResponse(clienteDTO);
-//            return ResponseEntity.status(OK).body(response);
-//        }
-//            return ResponseEntity.status(NOT_FOUND).build();
-//
-//    }
+    @Override
+    public ResponseEntity<ClienteResponse> atualizar(Long id, ClienteRequest request) {
+        ClienteDTO clienteDTO = service.atualizarCliente(id,mapper.requestToDto(request));
+        ClienteResponse response = mapper.dtoToResponse(clienteDTO);
+        return ResponseEntity.status(OK).body(response);
+    }
 
 }

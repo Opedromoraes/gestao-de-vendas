@@ -7,9 +7,6 @@ import com.example.gestaodevendas.repository.ClienteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class ClienteService {
@@ -19,28 +16,59 @@ public class ClienteService {
 
 
     public ClienteDTO salvar(ClienteDTO clienteDTO) {
-        verificarCliente(clienteDTO);
+        verificarCliente(null,clienteDTO);
         Cliente cliente = mapper.dtoToEntity(clienteDTO);
-        return mapper.entityToDTO(repository.save(cliente));
+        cliente = repository.save(cliente);
+        return mapper.entityToDTO(cliente);
 
     }
 
+    public ClienteDTO atualizarCliente(Long id, ClienteDTO clienteDTO) {
+        ClienteDTO clienteAntigoDTO = buscarPorId(id);
+        verificarCliente(id, clienteDTO);
 
-    public ClienteDTO verificarCliente(ClienteDTO clienteDTO) {
-        if (!repository.findByEmail(clienteDTO.getEmail()).isEmpty()) {
+        Cliente cliente = mapper.dtoToEntity(clienteAntigoDTO);
+
+        cliente.setCpf(clienteDTO.getCpf());
+        cliente.setNome(clienteDTO.getNome());
+        cliente.setEmail(clienteDTO.getEmail());
+        cliente.setTelefone(clienteDTO.getTelefone());
+
+        return mapper.entityToDTO(repository.save(cliente));
+    }
+
+//    public ClienteDTO verificarClienteCriado(ClienteDTO clienteDTO) {
+//        if (!repository.findByEmail(clienteDTO.getEmail()).isEmpty()) {
+//            throw new RuntimeException("Email já cadastrado");
+//        }
+//        if (!repository.findByTelefone(clienteDTO.getTelefone()).isEmpty()) {
+//            throw new RuntimeException("Telefone já cadastrado");
+//        }
+//        if (!repository.findByCpf(clienteDTO.getCpf()).isEmpty()) {
+//            throw new RuntimeException("CPF já cadastrado");
+//        }
+//        return clienteDTO;
+//    }
+
+    public ClienteDTO verificarCliente(Long id,ClienteDTO clienteDTO) {
+        Cliente clienteEncontrado = repository.findByEmail(clienteDTO.getEmail());
+
+        if (clienteEncontrado != null && !clienteEncontrado.getIdCliente().equals(id)) {
             throw new RuntimeException("Email já cadastrado");
         }
-        if (!repository.findByTelefone(clienteDTO.getTelefone()).isEmpty()) {
-            throw new RuntimeException("Telefone já cadastrado");
-        }
-        if (!repository.findByCpf(clienteDTO.getCpf()).isEmpty()) {
+        clienteEncontrado = repository.findByCpf(clienteDTO.getCpf());
+
+        if (clienteEncontrado != null && !clienteEncontrado.getIdCliente().equals(id)) {
             throw new RuntimeException("CPF já cadastrado");
         }
-//        Cliente cliente = mapper.dtoToEntity(clienteDTO);
-//        repository.save(cliente);
-//        ClienteDTO clienteDTO1 = mapper.entityToDTO(cliente);
 
-        return clienteDTO;
+        clienteEncontrado = repository.findByTelefone(clienteDTO.getTelefone());
+
+        if (clienteEncontrado != null && !clienteEncontrado.getIdCliente().equals(id)) {
+            throw new RuntimeException("Telefone já cadastrado");
+        }
+
+        return mapper.entityToDTO(clienteEncontrado);
     }
 
     public void deletarCliente(Long id) {
@@ -48,8 +76,8 @@ public class ClienteService {
     }
 
     public ClienteDTO buscarPorId(Long id) {
-        Cliente cliente = repository.findById(id).get();
+        Cliente cliente = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
         return mapper.entityToDTO(cliente);
     }
-
 }
