@@ -17,37 +17,29 @@ public class ClienteService {
     private final ClienteRepository repository;
     private final ClienteMapper mapper;
 
-    public ClienteService(ClienteRepository repository, ClienteMapper mapper) {
-        this.repository = repository;
-        this.mapper = mapper;
-    }
 
     public ClienteDTO salvar(ClienteDTO clienteDTO) {
-
         verificarCliente(clienteDTO);
-        Cliente cliente = repository.save(mapper.dtoToEntity(clienteDTO));
-        return mapper.entityToDTO(cliente);
+        Cliente cliente = mapper.dtoToEntity(clienteDTO);
+        return mapper.entityToDTO(repository.save(cliente));
+
     }
 
-    public Optional<Cliente> buscarPorId(Long id) {
-        return repository.findById(id);
-    }
 
-    public ClienteDTO verificarCliente(ClienteDTO clienteDTO){
-        if (clienteDTO.getEmail() != null){
+    public ClienteDTO verificarCliente(ClienteDTO clienteDTO) {
+        if (!repository.findByEmail(clienteDTO.getEmail()).isEmpty()) {
             throw new RuntimeException("Email já cadastrado");
         }
-        if (clienteDTO.getCpf() != null){
+        if (!repository.findByTelefone(clienteDTO.getTelefone()).isEmpty()) {
+            throw new RuntimeException("Telefone já cadastrado");
+        }
+        if (!repository.findByCpf(clienteDTO.getCpf()).isEmpty()) {
             throw new RuntimeException("CPF já cadastrado");
         }
-        if (clienteDTO.getTelefone() != null){
-            throw new RuntimeException("Telefone já cadastrado");
-
 //        Cliente cliente = mapper.dtoToEntity(clienteDTO);
 //        repository.save(cliente);
 //        ClienteDTO clienteDTO1 = mapper.entityToDTO(cliente);
 
-    }
         return clienteDTO;
     }
 
@@ -55,7 +47,9 @@ public class ClienteService {
         repository.deleteById(id);
     }
 
-//    public ClienteDTO buscarPorId(Long id) {
-//        Cliente cliente = repository.buscarPorId(id);
-//    }
+    public ClienteDTO buscarPorId(Long id) {
+        Cliente cliente = repository.findById(id).get();
+        return mapper.entityToDTO(cliente);
+    }
+
 }

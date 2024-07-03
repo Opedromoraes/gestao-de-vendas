@@ -20,7 +20,6 @@ import static org.springframework.http.HttpStatus.*;
 @Tag(name = "Clientes")
 @RequestMapping(value = "/clientes")
 @Validated
-
 public interface IClienteController {
 
         @Operation(
@@ -40,9 +39,8 @@ public interface IClienteController {
                                 description = "Ocorreu um erro inesperado.",
                                 content = @Content(schema = @Schema(implementation = ErroDTO.class)))
                 })
-        @PostMapping
-        @ResponseStatus(
-                CREATED)
+        @PostMapping(consumes = "application/json", produces = "application/json")
+        @ResponseStatus(CREATED)
         ResponseEntity<ClienteResponse> create(@Valid @RequestBody ClienteRequest clienteRequest);
 
         @Operation(
@@ -64,7 +62,7 @@ public interface IClienteController {
                 })
         @GetMapping("/{id}")
         @ResponseStatus(OK)
-        ResponseEntity<Cliente> buscarPorId(@PathVariable Long id);
+        ResponseEntity<ClienteResponse> buscarPorId(@PathVariable Long id);
 
         @Operation(
                 summary = "Deletar Cliente",
@@ -87,26 +85,26 @@ public interface IClienteController {
         @ResponseStatus(NO_CONTENT)
         ResponseEntity<Void> deletar(@PathVariable Long id);
 
-        @Operation(
-                summary = "Atualizar Cliente",
-                description = "Endpoint responsável por atualizar um cliente",
-                responses = {
-                        @ApiResponse(
-                                responseCode = "204",
-                                description = "Cliente atualizado com sucesso."
-                        ),
-                        @ApiResponse(
-                                responseCode = "404",
-                                description = "Cliente não encontrado.",
-                                content = @Content(schema = @Schema(implementation = ErroDTO.class))),
-                        @ApiResponse(
-                                responseCode = "500",
-                                description = "Ocorreu um erro inesperado.",
-                                content = @Content(schema = @Schema(implementation = ErroDTO.class)))
-                })
-        @PutMapping("/{id}")
-        @ResponseStatus(NOT_FOUND)
-        ResponseEntity<ClienteResponse> atualizar(@PathVariable Long id,@RequestBody Cliente detalhesCliente);
+//        @Operation(
+//                summary = "Atualizar Cliente",
+//                description = "Endpoint responsável por atualizar um cliente",
+//                responses = {
+//                        @ApiResponse(
+//                                responseCode = "204",
+//                                description = "Cliente atualizado com sucesso."
+//                        ),
+//                        @ApiResponse(
+//                                responseCode = "404",
+//                                description = "Cliente não encontrado.",
+//                                content = @Content(schema = @Schema(implementation = ErroDTO.class))),
+//                        @ApiResponse(
+//                                responseCode = "500",
+//                                description = "Ocorreu um erro inesperado.",
+//                                content = @Content(schema = @Schema(implementation = ErroDTO.class)))
+//                })
+//        @PutMapping("/{id}")
+//        @ResponseStatus(OK)
+//        ResponseEntity<ClienteResponse> atualizar(@PathVariable Long id,@RequestBody Cliente clienteNovo);
 //
 //        @Operation(
 //                summary = "Consultar cardápio paginado",
