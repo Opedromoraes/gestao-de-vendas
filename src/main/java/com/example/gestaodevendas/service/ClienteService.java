@@ -37,18 +37,6 @@ public class ClienteService {
         return mapper.entityToDTO(repository.save(cliente));
     }
 
-//    public ClienteDTO verificarClienteCriado(ClienteDTO clienteDTO) {
-//        if (!repository.findByEmail(clienteDTO.getEmail()).isEmpty()) {
-//            throw new RuntimeException("Email já cadastrado");
-//        }
-//        if (!repository.findByTelefone(clienteDTO.getTelefone()).isEmpty()) {
-//            throw new RuntimeException("Telefone já cadastrado");
-//        }
-//        if (!repository.findByCpf(clienteDTO.getCpf()).isEmpty()) {
-//            throw new RuntimeException("CPF já cadastrado");
-//        }
-//        return clienteDTO;
-//    }
 
     public ClienteDTO verificarCliente(Long id,ClienteDTO clienteDTO) {
         Cliente clienteEncontrado = repository.findByEmail(clienteDTO.getEmail());
