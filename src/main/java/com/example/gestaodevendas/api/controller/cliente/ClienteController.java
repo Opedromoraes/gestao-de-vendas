@@ -21,7 +21,7 @@ public class ClienteController implements IClienteController {
 
 
     @Override
-    public ResponseEntity<ClienteResponse> create(ClienteRequest request) {
+    public ResponseEntity<ClienteResponse> criar(ClienteRequest request) {
         ClienteDTO clienteDTO = service.salvar(mapper.requestToDto(request));
         ClienteResponse response = mapper.dtoToResponse(clienteDTO);
         return ResponseEntity.status(CREATED).body(response);

@@ -1,11 +1,13 @@
 package com.example.gestaodevendas.domain.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.br.CPF;
 
 
 @Entity
@@ -21,19 +23,21 @@ public class Cliente {
     private Long idCliente;
 
     @NotBlank(message = "O nome é obrigatório")
-    @JoinColumn(name = "nome",nullable = false)
+    @Column(name = "nome",nullable = false)
     private String nome;
 
     @NotBlank(message = "O email é obrigatório")
-    @JoinColumn(name = "email",nullable = false, unique = true)
+    @Email(message = "O email não existe")
+    @Column(name = "email",nullable = false, unique = true)
     private String email;
 
     @NotBlank(message = "O telefone é obrigatório")
-    @JoinColumn(name = "telefone",nullable = false, unique = true)
+    @Column(name = "telefone",nullable = false, unique = true)
     private String telefone;
 
     @NotBlank(message = "O cpf é obrigatório")
-    @JoinColumn(name = "cpf",nullable = false, unique = true)
+    @CPF(message = "O cpf não é válido")
+    @Column(name = "cpf",nullable = false, unique = true)
     private String cpf;
 
 

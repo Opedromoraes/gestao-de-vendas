@@ -1,19 +1,20 @@
 package com.example.gestaodevendas.domain.exceptions;
 
+import lombok.Getter;
 import org.springframework.http.HttpStatusCode;
 
 import java.util.List;
 
-
+@Getter
 public class BaseException extends RuntimeException{
 
     private final List<String> errors;
     private final HttpStatusCode status;
 
 
-    public BaseException(String message, List<String> errors, HttpStatusCode status) {
+    public BaseException(String message, List<String> errors, HttpStatusCode httpStatusCode) {
         super(message);
-        this.status = status;
+        this.status = httpStatusCode;
         this.errors = errors;
     }
 
@@ -23,8 +24,8 @@ public class BaseException extends RuntimeException{
         this.errors = null;
     }
 
-    public BaseException(String message, Throwable cause, HttpStatusCode httpStatusCode) {
-        super(message, cause);
+    public BaseException(String message, Throwable e, HttpStatusCode httpStatusCode) {
+        super(message, e);
         this.status = httpStatusCode;
         this.errors = null;
     }

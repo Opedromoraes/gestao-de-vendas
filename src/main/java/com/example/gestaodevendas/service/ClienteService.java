@@ -64,8 +64,7 @@ public class ClienteService {
     }
 
     public ClienteDTO buscarPorId(Long id) {
-        Cliente cliente = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+        Cliente cliente = repository.findById(id).get();
         return mapper.entityToDTO(cliente);
     }
 }

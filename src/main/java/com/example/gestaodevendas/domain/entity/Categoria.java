@@ -22,17 +22,10 @@ public class Categoria {
     private Long idCategoria;
 
     @NotBlank(message = "O nome é obrigatório")
-    @JoinColumn(name = "nome",nullable = false)
+    @Column(name = "nome",nullable = false)
     private String nome;
 
-//    @ManyToOne
-//    @JoinColumn(name = "id_cardapio")
-//    private Cardapio cardapio;
-    // Colocar isso aqui em produtos (baseando a categoria no lugar de cardapio)
-
-//    @OneToMany(mappedBy = "categoria", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private List<Produto> produto;
-
-
+    @OneToMany(mappedBy = "categoria",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    private List<Produto> produtos;
 
 }
