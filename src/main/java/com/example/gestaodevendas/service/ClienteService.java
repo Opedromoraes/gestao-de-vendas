@@ -2,10 +2,13 @@ package com.example.gestaodevendas.service;
 
 import com.example.gestaodevendas.domain.dto.ClienteDTO;
 import com.example.gestaodevendas.domain.entity.Cliente;
+import com.example.gestaodevendas.domain.exceptions.BusinessException;
 import com.example.gestaodevendas.domain.mapper.ClienteMapper;
 import com.example.gestaodevendas.repository.ClienteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -16,16 +19,15 @@ public class ClienteService {
 
 
     public ClienteDTO salvar(ClienteDTO clienteDTO) {
-        verificarCliente(null,clienteDTO);
         Cliente cliente = mapper.dtoToEntity(clienteDTO);
         cliente = repository.save(cliente);
-        return mapper.entityToDTO(cliente);
 
+        return mapper.entityToDTO(cliente);
     }
 
     public ClienteDTO atualizarCliente(Long id, ClienteDTO clienteDTO) {
         ClienteDTO clienteAntigoDTO = buscarPorId(id);
-        verificarCliente(id, clienteDTO);
+        verificarCliente(clienteDTO);
 
         Cliente cliente = mapper.dtoToEntity(clienteAntigoDTO);
 
@@ -38,25 +40,17 @@ public class ClienteService {
     }
 
 
-    public ClienteDTO verificarCliente(Long id,ClienteDTO clienteDTO) {
-        Cliente clienteEncontrado = repository.findByEmail(clienteDTO.getEmail());
+    public ClienteDTO verificarCliente(ClienteDTO clienteDTO) {
+        Optional<Cliente> clienteOpt = repository.findByEmail(clienteDTO.getEmail());
+        clienteOpt.orElseThrow(() -> new BusinessException("Email já cadastrado"));
 
-        if (clienteEncontrado != null && !clienteEncontrado.getIdCliente().equals(id)) {
-            throw new RuntimeException("Email já cadastrado");
-        }
-        clienteEncontrado = repository.findByCpf(clienteDTO.getCpf());
+        repository.findByCpf(clienteDTO.getCpf());
+        clienteOpt.orElseThrow(() -> new BusinessException("CPF já cadastrado"));
 
-        if (clienteEncontrado != null && !clienteEncontrado.getIdCliente().equals(id)) {
-            throw new RuntimeException("CPF já cadastrado");
-        }
+        repository.findByTelefone(clienteDTO.getTelefone());
+        clienteOpt.orElseThrow(() -> new BusinessException("Telefone já cadastrado"));
 
-        clienteEncontrado = repository.findByTelefone(clienteDTO.getTelefone());
-
-        if (clienteEncontrado != null && !clienteEncontrado.getIdCliente().equals(id)) {
-            throw new RuntimeException("Telefone já cadastrado");
-        }
-
-        return mapper.entityToDTO(clienteEncontrado);
+        return mapper.entityToDTO(clienteOpt.get());
     }
 
     public void deletarCliente(Long id) {

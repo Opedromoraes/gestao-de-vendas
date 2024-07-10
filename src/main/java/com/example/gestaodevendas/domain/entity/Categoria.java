@@ -22,7 +22,7 @@ public class Categoria {
     private Long idCategoria;
 
     @NotBlank(message = "O nome é obrigatório")
-    @Column(name = "nome",nullable = false)
+    @Column(name = "nome",nullable = false,unique = true)
     private String nome;
 
     @OneToMany(mappedBy = "categoria",cascade = CascadeType.ALL,fetch = FetchType.LAZY)

@@ -1,5 +1,6 @@
 package com.example.gestaodevendas.api.controller.produto.response;
 
+import com.example.gestaodevendas.api.controller.categoria.response.CategoriaResponse;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,5 +18,6 @@ public class ProdutoResponse {
     String decricao;
     Integer quantidade;
     Long idCategoria;
+    CategoriaResponse categoria;
 
 }

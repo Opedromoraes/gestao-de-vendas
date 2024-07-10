@@ -20,7 +20,7 @@ public class Produto {
     Long idProduto;
 
     @NotBlank
-    @Column(nullable = false)
+    @Column(nullable = false,unique = true)
     String nome;
 
     @Column(nullable = false)

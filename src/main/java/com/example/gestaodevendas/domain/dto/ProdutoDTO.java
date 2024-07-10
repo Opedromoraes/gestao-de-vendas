@@ -12,12 +12,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ProdutoDTO {
 
-    Long idProduto;
-    String nome;
-    Double preco;
-    String decricao;
-    Integer quantidade;
-    Long idCategoria;
-    CategoriaDTO categoriaDTO;
+    private Long idProduto;
+    private String nome;
+    private Double preco;
+    private String decricao;
+    private Integer quantidade;
+    private Long idCategoria;
+    private CategoriaDTO categoria;
 
 }

@@ -1,13 +1,10 @@
 package com.example.gestaodevendas.service;
 
 import com.example.gestaodevendas.domain.dto.CategoriaDTO;
-import com.example.gestaodevendas.domain.dto.ClienteDTO;
 import com.example.gestaodevendas.domain.entity.Categoria;
-import com.example.gestaodevendas.domain.entity.Cliente;
+import com.example.gestaodevendas.domain.exceptions.NotFoundException;
 import com.example.gestaodevendas.domain.mapper.CategoriaMapper;
-import com.example.gestaodevendas.domain.mapper.ClienteMapper;
 import com.example.gestaodevendas.repository.CategoriaRepository;
-import com.example.gestaodevendas.repository.ClienteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +24,7 @@ public class CategoriaService {
 
     public CategoriaDTO buscarPorId(Long id) {
         Categoria categoria =repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
+                .orElseThrow(() -> new NotFoundException("Cliente não encontrado"));
         return mapper.entityToDTO(categoria);
     }
 

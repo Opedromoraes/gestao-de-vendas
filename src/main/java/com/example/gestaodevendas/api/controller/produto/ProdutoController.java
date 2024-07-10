@@ -35,13 +35,16 @@ public class ProdutoController implements IProdutoController {
 
     @Override
     public ResponseEntity<ProdutoResponse> atualizar(Long id, ProdutoRequest request) {
-        return null;
+        ProdutoDTO produtoDTO = service.atualizarProduto(id,mapper.requestToDto(request));
+        ProdutoResponse response = mapper.dtoToResponse(produtoDTO);
+        return ResponseEntity.status(OK).body(response);
     }
 
     @Override
     public ResponseEntity<Void> deletar(Long id) {
         return null;
     }
+
 
 
 //
