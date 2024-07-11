@@ -42,7 +42,8 @@ public class ProdutoController implements IProdutoController {
 
     @Override
     public ResponseEntity<Void> deletar(Long id) {
-        return null;
+        service.deletarProduto(id);
+        return ResponseEntity.noContent().build();
     }
 
 

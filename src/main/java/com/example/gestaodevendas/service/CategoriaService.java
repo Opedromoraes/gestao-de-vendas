@@ -2,6 +2,7 @@ package com.example.gestaodevendas.service;
 
 import com.example.gestaodevendas.domain.dto.CategoriaDTO;
 import com.example.gestaodevendas.domain.entity.Categoria;
+import com.example.gestaodevendas.domain.exceptions.DataBaseException;
 import com.example.gestaodevendas.domain.exceptions.NotFoundException;
 import com.example.gestaodevendas.domain.mapper.CategoriaMapper;
 import com.example.gestaodevendas.repository.CategoriaRepository;
@@ -18,17 +19,23 @@ public class CategoriaService {
     public CategoriaDTO salvar(CategoriaDTO categoriaDTO) {
 
         Categoria categoria = mapper.dtoToEntity(categoriaDTO);
-        repository.save(categoria);
+        try {
+            repository.save(categoria);
+        } catch (Exception ex){
+            throw new DataBaseException("Erro ao acessar o banco de dados");
+        }
         return mapper.entityToDTO(categoria);
     }
 
     public CategoriaDTO buscarPorId(Long id) {
         Categoria categoria =repository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Cliente não encontrado"));
+                .orElseThrow(() -> new NotFoundException("Categoria não encontrada"));
         return mapper.entityToDTO(categoria);
     }
 
     public void deletarCliente(Long id) {
+        CategoriaDTO categoriaDTO = buscarPorId(id);
+        mapper.dtoToEntity(categoriaDTO);
         repository.deleteById(id);
     }
 }
