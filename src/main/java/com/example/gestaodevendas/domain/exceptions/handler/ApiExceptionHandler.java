@@ -36,6 +36,11 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleBaseException(Exception ex) {
+        return new ResponseEntity<>(ex.getCause().getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
 //    private final MessageUtils messageUtils;
 //
 //    @ExceptionHandler({

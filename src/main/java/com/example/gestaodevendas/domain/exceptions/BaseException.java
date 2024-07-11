@@ -1,42 +1,31 @@
 package com.example.gestaodevendas.domain.exceptions;
 
+import com.example.gestaodevendas.domain.exceptions.dto.ErroDTO;
 import lombok.Getter;
+import org.springframework.http.HttpStatusCode;
 
 @Getter
 public class BaseException extends RuntimeException{
 
-//    private final ErroDTO erro;
-//    private final HttpStatusCode status;
+    private final ErroDTO erro;
+    private final HttpStatusCode status;
 
     public BaseException(String message) {
         super(message);
+        this.erro = null;
+        this.status = null;
     }
 
-    public BaseException(String message, Throwable cause) {
-        super(message, cause);
+    public BaseException(String message, ErroDTO erro, HttpStatusCode status) {
+        super(message);
+        this.erro = erro;
+        this.status = status;
     }
 
-//    public BaseException(String message,ErroDTO erro, HttpStatusCode httpStatusCode) {
-//        super(message);
-//        this.status = httpStatusCode;
-//        this.erro = erro;
-//    }
-//
-//    public BaseException(String message, HttpStatusCode httpStatusCode) {
-//        super(message);
-//        this.status = httpStatusCode;
-//        this.errors = null;
-//    }
-//
-//    public BaseException(String message, Throwable e, HttpStatusCode httpStatusCode) {
-//        super(message, e);
-//        this.status = httpStatusCode;
-//        this.errors = null;
-//    }
-//
-//    public BaseException(String message,HttpStatusCode httpStatusCode,Object[] args) {
-//        super(String.format(message,args));
-//        this.status = httpStatusCode;
-//        this.errors = null;
-//    }
+
+    public BaseException(ErroDTO erro, HttpStatusCode status) {
+        this.erro = erro;
+        this.status = status;
+    }
+
 }

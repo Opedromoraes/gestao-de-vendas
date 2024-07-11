@@ -10,6 +10,7 @@ import com.example.gestaodevendas.repository.ClienteRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -25,7 +26,7 @@ public class ClienteService {
 
         try {
             cliente = repository.save(cliente);
-        } catch (Exception ex){
+        } catch (Exception ex) {
             throw new DataBaseException("Erro ao acessar o banco de dados");
         }
 
@@ -34,7 +35,7 @@ public class ClienteService {
 
     public ClienteDTO atualizarCliente(Long id, ClienteDTO clienteDTO) {
         ClienteDTO clienteAntigoDTO = buscarPorId(id);
-        verificarCliente(clienteDTO);
+        verificarCliente(clienteDTO, id);
 
         Cliente cliente = mapper.dtoToEntity(clienteAntigoDTO);
 
@@ -47,17 +48,27 @@ public class ClienteService {
     }
 
 
-    public ClienteDTO verificarCliente(ClienteDTO clienteDTO) {
-        Optional<Cliente> clienteOpt = repository.findByEmail(clienteDTO.getEmail());
-        clienteOpt.orElseThrow(() -> new BusinessException("Email já cadastrado"));
+    public void verificarCliente(ClienteDTO clienteDTO, Long id) {
+        repository.findByEmail(clienteDTO.getEmail())
+                .ifPresent(cliente -> {
+                    if (!Objects.equals(cliente.getIdCliente(), id)) {
+                        throw new BusinessException("E-mail já cadastrado");
+                    }
+                });
 
-        repository.findByCpf(clienteDTO.getCpf());
-        clienteOpt.orElseThrow(() -> new BusinessException("CPF já cadastrado"));
+        repository.findByCpf(clienteDTO.getCpf())
+                .ifPresent(cliente -> {
+                    if (!Objects.equals(cliente.getIdCliente(), id)) {
+                        throw new BusinessException("CPF já cadastrado");
+                    }
+                });
 
-        repository.findByTelefone(clienteDTO.getTelefone());
-        clienteOpt.orElseThrow(() -> new BusinessException("Telefone já cadastrado"));
-
-        return mapper.entityToDTO(clienteOpt.get());
+        repository.findByTelefone(clienteDTO.getTelefone())
+                .ifPresent(cliente -> {
+                    if (!Objects.equals(cliente.getIdCliente(), id)) {
+                        throw new BusinessException("Telefone já cadastrado");
+                    }
+                });
     }
 
     public void deletarCliente(Long id) {

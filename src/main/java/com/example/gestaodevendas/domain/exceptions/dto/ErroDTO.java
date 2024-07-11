@@ -12,6 +12,5 @@ import java.util.List;
 public class ErroDTO{
 
     private final String message;
-    private final List<String> errors;
 
 }
