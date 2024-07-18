@@ -1,11 +1,17 @@
 package com.example.gestaodevendas.service;
 
 import com.example.gestaodevendas.api.controller.excel.request.ExcelRequest;
+import com.example.gestaodevendas.domain.entity.Cliente;
+import com.example.gestaodevendas.repository.ClienteRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+//import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+//import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 
 import java.io.*;
 import java.util.ArrayList;
@@ -17,7 +23,8 @@ import java.util.List;
 public class ExcelService {
 
     private static final String fileName = "C:/testePlanilha/novoExcel.xls";
-//    private ExcelRepository repository;
+    private ClienteRepository repository;
+//    private MockMvc mockMvc;
 
     public String gerarExcel(ExcelRequest request) {
 
@@ -71,6 +78,36 @@ public class ExcelService {
         return list;
     }
 
+    public List<Cliente> carregarExcel(String file) {
+        List<Cliente> clientes = new ArrayList<>();
+        try {
+            Workbook workbook = getWorkbookFromFile(file);
+            Sheet sheet = workbook.getSheetAt(0);
+
+            for (Row row : sheet) {
+                if (row.getRowNum() == 0){
+                    continue;
+                }
+                Cliente cliente = new Cliente();
+                cliente.setCpf(row.getCell(0).getStringCellValue());
+                cliente.setEmail(row.getCell(1).getStringCellValue());
+                cliente.setNome(row.getCell(2).getStringCellValue());
+                cliente.setTelefone(row.getCell(3).getStringCellValue());
+
+                clientes.add(cliente);
+            }
+
+            workbook.close();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        salvarEntidades(clientes);
+
+        return clientes;
+    }
+
     public Workbook getWorkbookFromFile(String filePath) throws IOException {
         File file = new File(filePath);
         try (FileInputStream fileInputStream = new FileInputStream(file)) {
@@ -81,5 +118,10 @@ public class ExcelService {
             // Cria um objeto Woorkbook(um arquivo) através do FileInputStream para retornar ele no método "lerExcel"
         }
     }
+
+    public void salvarEntidades(List<Cliente> clientes) {
+        repository.saveAll(clientes);
+    }
+
 }
 

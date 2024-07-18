@@ -40,5 +40,4 @@ public class Cliente {
     @Column(name = "cpf",nullable = false, unique = true)
     private String cpf;
 
-
 }

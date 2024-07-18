@@ -4,8 +4,10 @@ import com.example.gestaodevendas.api.controller.excel.request.ExcelRequest;
 import com.example.gestaodevendas.service.ExcelService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -28,15 +30,23 @@ public class ExcelController implements IExcelController {
         return ResponseEntity.ok().body(response);
     }
 
+    @Override
+    public ResponseEntity<String> carregarExcel(MultipartFile file) {
+        service.carregarExcel(String.valueOf(file));
+        return new ResponseEntity<>("Arquivo carregado e salvo com sucesso", HttpStatus.OK);
+    }
+
 //    @Override
 //    public ResponseEntity<List<String>> lerExcel(MultipartFile file) throws IOException {
 //        service.lerExcel(file);
 //    }
 
 
+    //1:
     // criar endpoint para ler uma planilha utilizando header
     // receber um arquivo excel (multpartfiledata), em que o cabeçalho vai ser todos os campos do objeto cliente
     // no service ler o arquivo excel, validar e salvar o cliente no banco
+    // 2:
     // planilha de notas de alunos (Coluna A = nomes; Coluna B = notas)
     // acrescentar uma coluna com a média
     // Focar em olhar documentação
